@@ -1,0 +1,301 @@
+package lv.enthusiast.learnactors.manager {
+	
+	import flash.data.SQLConnection;
+	import flash.data.SQLMode;
+	import flash.data.SQLResult;
+	import flash.data.SQLStatement;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.filesystem.File;
+	import flash.utils.ByteArray;
+	import lv.enthusiast.learnactors.model.dto.ActorPack;
+	
+	/**
+	 * ...
+	 * @author Cyberprodigy
+	 */
+	public class DataBaseConnection {
+		static public const ENC_KEY:String = "quThENeDe8unE6ra";
+		static public const DB_FILE_NAME:String = "appDb.db";
+
+		
+		// [ Constants ]
+		
+		// [ Class variables ]
+		private var dbFile:File;
+		private var sqlConnection:SQLConnection;
+		private var query:SQLStatement;
+		
+		// [ Items on stage]
+		
+		public function DataBaseConnection() {
+			
+		}
+		
+		public function executeQuery(queryText:String):SQLResult {
+			query.text = queryText;
+			try {
+				query.execute()
+			} 
+			catch (err:Error) {
+				trace("DataBaseConnection::executeQuery failed " + queryText)
+			}
+			var result:Array = null;
+			return query.getResult();
+		}
+		
+		public function initialize():void {
+			dbFile = File.applicationStorageDirectory.resolvePath(DB_FILE_NAME);
+			sqlConnection = new SQLConnection();
+			var encKey:ByteArray = new ByteArray();
+			encKey.writeMultiByte(ENC_KEY, "iso-8859-1");
+			sqlConnection.open(dbFile, SQLMode.CREATE, false, 1024, encKey);
+			
+			query = new SQLStatement();
+			query.sqlConnection = sqlConnection;
+			
+			// validate database
+			var result:SQLResult;
+			
+			result = executeQuery("SELECT * FROM tbl_packs");
+			if (result == null || result.data == null || result.data.length == 0) {
+				createTablePacks();
+			}
+			
+			result = executeQuery("SELECT * FROM tbl_actors");
+			if (result == null || result.data == null || result.data.length == 0) {
+				createTableActors();
+			}
+			
+			result = executeQuery("SELECT * FROM tbl_games");
+			if (result == null ) {
+				createTableGames();
+			}
+		}
+		
+		private function createTableGames():void 
+		{
+			executeQuery("DROP TABLET tbl_games");
+			
+			executeQuery("CREATE TABLE tbl_games (id INTEGER PRIMARY KEY AUTOINCREMENT, startTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP, playSeconds INTEGER, packId INTEGER, correct INTEGER, wrong INTEGER, points INTEGER)");
+			
+			executeQuery("CREATE INDEX idx_actors_id ON tbl_games_startTime (startTime)");
+		}
+		
+		private function createTableActors():void 
+		{
+			executeQuery("DROP TABLET tbl_actors");
+			
+			executeQuery("CREATE TABLE tbl_actors (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, packId INTEGER, correct INTEGER DEFAULT 0, wrong INTEGER DEFAULT 0)");
+			
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Johnny Depp',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Al Pacino',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Robert De Niro',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Kevin Spacey',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Denzel Washington',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Russell Crowe',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Brad Pitt',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Angelina Jolie',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Leonardo DiCaprio',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Tom Cruise',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('John Travolta',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Arnold Schwarzenegger',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Sylvester Stallone',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Kate Winslet',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Christian Bale',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Morgan Freeman',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Keanu Reeves',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Nicolas Cage',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Hugh Jackman',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Edward Norton',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Bruce Willis',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Tom Hanks',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Charlize Theron',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Will Smith',1)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Sean Connery',1)");
+			
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Keira Knightley',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Vin Diesel',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Matt Damon',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Richard Gere',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Catherine Zeta Jones',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Clive Owen',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Mel Gibson',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('George Clooney',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jack Nicholson',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Scarlett Johansson',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Tom Hardy',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Robert Downey',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Orlando Bloom',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Ian McKellen',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Antonio Banderas',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Guy Pearce',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Samuel Lee Jackson',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Sandra Bullock',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Meg Ryan',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Megan Fox',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Nicole Kidman',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Gerard Butler',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Simon Baker',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Cameron Diaz',2)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Katherine Heigl',2)");
+			
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Adam Sandler',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Bill Murray',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Bradley Cooper',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Brendan Fraser',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Christoph Waltz',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Colin Farrell',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Dwayne Johnson',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Eddie Murphy',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Ellen Page',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Harrison Ford',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jake Gyllenhaal',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jason Statham',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jim Carrey',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Joaquin Phoenix',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('John Malkovich',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Josh Holloway',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jude Law',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Mark Wahlberg',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Meryl Streep',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Michael Shannon',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Philip Seymour Hoffman',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Robert Pattinson',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Ryan Gosling',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Sean Penn',3)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Woody Harrelson',3)");
+
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Aaron Paul',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Adam Driver',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Allison Williams',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Andrew Garfield',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Andy Samberg',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Ansel Elgort',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Channing Tatum',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Chloe Grace Moretz',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Emilia Clarke',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Emma Roberts',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Emma Stone',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Emmy Rossum',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jennifer Lawrence',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jonah Hill',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Josh Hutcherson',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Kaley Cuoco',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Liam Hemsworth',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Michael Bakari Jordan',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Nina Dobrev',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Shailene Woodley',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Taylor Lautner',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Taylor Schilling',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Theo James',4)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Zooey Deschanel',4)");
+			
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Angelina Jolie',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Blake Lively',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Cameron Diaz',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Catherine Zeta Jones',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Charlize Theron',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Drew Barrymore',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Ellen Page',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Emma Stone',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Halle Berry',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jennifer Aniston',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jennifer Lawrence',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jennifer Lopez',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jessica Alba',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jodie Foster',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Julia Roberts',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Katherine Heigl',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Kirsten Dunst',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Kristen Stewart',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Marion Cotillard',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Meg Ryan',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Megan Fox',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Mila Kunis',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Natalie Portman',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Sandra Bullocks',5)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Scarlett Johansson',5)");
+
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Angelina Jolie',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Bradley Cooper',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Chris Hemsworth',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Chris Pine',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Dwayne Johnson',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Dylan Obrien',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Francis Lawrence',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('George Clooney',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Gerard Butler',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Hugh Jackman',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Ian Mckellen',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jason Statham',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jim Carrey',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Johnny Depp',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Jonah Hill',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Leonardo Dicaprio',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Mark Wahlberg',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Megan Fox',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Morgan Freeman',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Robert Downey',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Russell Crowe',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Shailene Woodley',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Vin Diesel',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Will Smith',6)");
+			executeQuery("INSERT INTO tbl_actors(name, packId) VALUES('Zach Galifianakis',6)");
+
+
+
+			
+			executeQuery("CREATE INDEX idx_actors_id ON tbl_actors (packId)");
+			
+		}
+		
+		
+		/*
+		 * 
+		 * 26.Keira Knightley
+27.Vin Diesel
+28.Matt Damon
+29.Richard Gere
+30.Catherine Zeta-Jones
+31.Clive Owen
+32.Mel Gibson
+33.George Clooney
+34.Jack Nicholson
+35.Scarlett Johansson
+36.Tom Hardy
+37.Robert Downey
+38.Orlando Bloom
+39.Ian McKellen
+40.Antonio Banderas
+41.Guy Pearce
+42.Samuel Lee Jackson
+43.Sandra Bullock
+44.Meg Ryan
+45.Megan Fox
+46.Nicole Kidman
+47.Gerard Butler
+48.Simon Baker
+49.Cameron Diaz
+50.Katherine Heigl
+		 * */
+		private function createTablePacks():void {
+			executeQuery("DROP TABLET tbl_packs");
+			
+			executeQuery("CREATE TABLE tbl_packs (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, playStoreId TEXT, appStoreId TEXT)");
+			
+			executeQuery("INSERT INTO tbl_packs VALUES(" + ActorPack.PACK_025 + ", 'Top 25', '', '')");
+			executeQuery("INSERT INTO tbl_packs VALUES(" + ActorPack.PACK_050 + ", 'Top 50', '', '')");
+			executeQuery("INSERT INTO tbl_packs VALUES(" + ActorPack.PACK_075 + ", 'Top 75', '', '')");
+			executeQuery("INSERT INTO tbl_packs VALUES(" + ActorPack.PACK_OLD + ", 'Actresses', '', '')");
+			executeQuery("INSERT INTO tbl_packs VALUES(" + ActorPack.PACK_NEW + ", 'Young stars', '', '')");
+			executeQuery("INSERT INTO tbl_packs VALUES(" + ActorPack.PACK_ACTION + ", 'In action', '', '')");
+		}
+	
+		// [ Setters & getters ]
+	
+		// [ Event handlers ]
+	
+	}
+
+}

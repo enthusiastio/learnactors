@@ -1,0 +1,39 @@
+<particleEmitterConfig>
+  <texture name="texture.png"/>
+  <sourcePosition x="300.00" y="300.00"/>
+  <sourcePositionVariance x="183.68" y="595.22"/>
+  <speed value="130.63"/>
+  <speedVariance value="429.83"/>
+  <particleLifeSpan value="1.04"/>
+  <particleLifespanVariance value="8.03"/>
+  <angle value="259.21"/>
+  <angleVariance value="336.65"/>
+  <gravity x="119.03" y="56.06"/>
+  <radialAcceleration value="327.21"/>
+  <tangentialAcceleration value="-33.27"/>
+  <radialAccelVariance value="192.27"/>
+  <tangentialAccelVariance value="45.24"/>
+  <startColor red="0.64" green="0.26" blue="0.44" alpha="0.76"/>
+  <startColorVariance red="0.42" green="0.99" blue="0.96" alpha="0.25"/>
+  <finishColor red="0.54" green="0.99" blue="0.9" alpha="0.59"/>
+  <finishColorVariance red="0.1" green="0.54" blue="0.34" alpha="0.94"/>
+  <maxParticles value="736.47"/>
+  <startParticleSize value="25.9"/>
+  <startParticleSizeVariance value="33.44"/>
+  <finishParticleSize value="32.93"/>
+  <FinishParticleSizeVariance value="16.17"/>
+  <duration value="-1.00"/>
+  <emitterType value="0"/>
+  <maxRadius value="60.59"/>
+  <maxRadiusVariance value="414.81"/>
+  <minRadius value="185.89"/>
+  <minRadiusVariance value="471.28"/>
+  <rotatePerSecond value="35.57"/>
+  <rotatePerSecondVariance value="110.24"/>
+  <blendFuncSource value="770"/>
+  <blendFuncDestination value="1"/>
+  <rotationStart value="335.26"/>
+  <rotationStartVariance value="235.44"/>
+  <rotationEnd value="197.44"/>
+  <rotationEndVariance value="228.66"/>
+</particleEmitterConfig>
